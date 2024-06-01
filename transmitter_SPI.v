@@ -103,9 +103,9 @@ module transmitter_SPI(
                     - Se activa CS en bajo
                     - Operaciones para configurar SCK según el modo deseado
                     - Se almacena el data_in en inter_data
-                    - Configurar polaridad de K
+                    - Configurar polaridad de SCK
                 */ 
-                nx_inter_data = data_in; // Hice un cambioa acá 
+                nx_inter_data = data_in; // Hice un cambio acá 
                 CS = 0; 
                 if (CKP) begin 
                     SCK = 0; // Modo 1n
