@@ -51,10 +51,8 @@ module transmitter_SPI(
     wire posedge_sck;                  // Capturar Posedge SCK
     wire negedfe_sck;                  // Capturar Negedge SCK
 
+    // Para manejar reloj SCK
     reg sck_anterior; 
-    //reg sck_adelanto; 
-    // Para SCK y modos de operacion
-    // assign SCK = div_freq[DIV_FREQ-1]; // Tomar bit más significativo (1/4 clk)
     assign posedge_sck = !sck_anterior && SCK; // Flanco positivo de SCK
     assign negedge_sck = sck_anterior && !SCK; // Flanco negativo de SCK
     
@@ -130,7 +128,7 @@ module transmitter_SPI(
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end 
                     /*
-                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
+                        Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
                         la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
                         Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
                     */
@@ -145,7 +143,7 @@ module transmitter_SPI(
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end
                     /*
-                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
+                        Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
                         la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
                         Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
                     */
@@ -153,7 +151,7 @@ module transmitter_SPI(
                 end
                 
                 // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
-                else if (nx_count_bit == 15) nx_state = WAITING; // 15 para que de la vuelta completa
+                else if (nx_count_bit == 16) nx_state = WAITING; // 16 para que de la vuelta completa
 
             end
 

@@ -1,18 +1,18 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Jun 01 04:23:12 2024
+[*] Sat Jun 01 23:08:55 2024
 [*]
 [dumpfile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\resultados_SPI.vcd"
-[dumpfile_mtime] "Sat Jun 01 03:51:45 2024"
-[dumpfile_size] 5607
+[dumpfile_mtime] "Sat Jun 01 23:08:12 2024"
+[dumpfile_size] 8974
 [savefile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\SPI_ondas_ordenadas.gtkw"
-[timestart] 0
+[timestart] 37
 [size] 1920 1017
 [pos] -1929 -9
-*-4.009690 101 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.009690 176 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] SPI_tb.
 [sst_width] 197
-[signals_width] 212
+[signals_width] 221
 [sst_expanded] 1
 [sst_vpaned_height] 300
 @28
@@ -22,9 +22,14 @@ SPI_tb.U0.SCK
 SPI_tb.U0.strt
 SPI_tb.U0.state[2:0]
 SPI_tb.U0.data_in[7:0]
+SPI_tb.U1.data_in[7:0]
+@24
+SPI_tb.U0.count_bit[4:0]
+@28
+SPI_tb.U0.CKP
+SPI_tb.U0.CPH
 SPI_tb.U0.inter_data[7:0]
-SPI_tb.U0.MOSI
-@23
-SPI_tb.U0.count_bit[3:0]
+[color] 7
+SPI_tb.U1.inter_data[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

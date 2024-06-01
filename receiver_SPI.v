@@ -32,8 +32,6 @@ module receiver_SPI(
 
     // Declaración de salidas (outputs)
     output reg MISO;
-    //output reg SS, MOSI; 
-    //output reg SCK;
 
     // Asignando estados
     localparam WAITING = 2'b00;
@@ -73,7 +71,7 @@ module receiver_SPI(
         end
     end // Fin declaración de FFs
 
-    // Declaracación lógica combinacional
+    // Declaración lógica combinacional
     always @(*)begin
         nx_state = state; 
         nx_count_bit = count_bit;
@@ -94,9 +92,7 @@ module receiver_SPI(
             
             START: begin 
                 /*Se preparan las condiciones para iniciar la transacción: 
-                    - Operaciones para configurar SCK según el modo deseado
                     - Se almacena el data_in en inter_data
-                    - Configurar polaridad de SCK
                 */ 
                 nx_inter_data = data_in; // Se almacena data_in en inter_data 
                 
@@ -114,7 +110,7 @@ module receiver_SPI(
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end 
                     /*
-                        Esto es posible ya que los conforme llegan bits desde MISO los otros bits se desplazan a 
+                        Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
                         la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
                         Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
                     */
@@ -150,7 +146,7 @@ module receiver_SPI(
                 end
                 
                 // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
-                else if (nx_count_bit == 15) nx_state = WAITING; // 15 para que de la vuelta completa
+                else if (nx_count_bit == 16) nx_state = WAITING; // 16 para que de la vuelta completa
 
             end
 

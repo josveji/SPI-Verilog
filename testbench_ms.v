@@ -8,7 +8,7 @@ Descripción del archivo: Este es el código encargado de evaluar las pruebas de
 "tester.v" en "transmitter_SPI.v" y "receiver_SPI.v". 
 */
 
-`include "tester_ms.v" // Incluyendo archivo de pruebas
+//`include "tester_ms.v" // Incluyendo archivo de pruebas
 `include "transmitter_SPI.v" // Incluyendo Transmisor
 `include "receiver_SPI.v" // Incluyendo Receptor
 
@@ -16,12 +16,12 @@ Descripción del archivo: Este es el código encargado de evaluar las pruebas de
 
 module SPI_tb;
     //Entradas
-    reg clk, rst_m, rst_s1, CPH, CKP, strt, MISO; 
+    reg clk, rst_m, rst_s1, CPH, CKP, strt; 
     reg [7:0] data_in_m;   // Entradas
     reg [7:0] data_in_s1;  // Data_in de Slave 1
 
     // Salidas 
-    wire CS, MOSI, SCK;
+    wire CS, MISO, MOSI, SCK; // Agregué MISO acá
 
     initial begin 
         $dumpfile("resultados_SPI.vcd"); // Archivo con resultados
@@ -86,15 +86,18 @@ module SPI_tb;
         
         clk = 0;
         rst_m = 0;
-        rst_s1 
+        rst_s1 = 0;
         CPH = 0;
+        CKP = 1;
         strt = 0;
-        CKP = 1; 
-        #40 rst = 1;
-
+        
+        #40 rst_m = 1;
+        rst_s1 = 1; 
+        
         #4 strt = 1; 
         #4 strt = 0;
 
+        #200 $finish;
 
 
     end // Fin de las pruebas
