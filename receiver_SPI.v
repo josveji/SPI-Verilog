@@ -17,23 +17,23 @@ module receiver_SPI(
     rst,     // Reset del sistema
     CPH,     // Define el flanco de SCK 
     CKP,     // Define la polaridad de SCK
-    MISO,    // Recibe bit por bit la información enviada por el Receptor
-    strt,    // Inicia la operación de la interfaz
-    data_in, // Ingreso se dato que debe enviarse por MOSI
-
+    MOSI,    // Recibe bit por bit la información enviada por el Transmisor
+    data_in, // Ingreso de dato que debe enviarse por MOSI
+    SS,      // Prepara para iniciar el envío de información (CS)
+    SCK,     // Reloj interno que sale del Transmisor
+   
     // Outputs
-    MOSI,    // Comunicación Transmisor -> Receptor, bit por bit
-    SCK,     // Reloj interno que se transmite al Receptor
-    CS       // Indica que va a enviar información al Receptor
+    MISO    // Comunicación Receptor -> Transmisor, bit por bit
     ); 
 
     // Declaración de entradas (inputs)
-    input clk, rst, CPH, CKP, strt, MISO; 
+    input clk, rst, CPH, CKP, MOSI, SS, SCK; 
     input [7:0] data_in; 
 
     // Declaración de salidas (outputs)
-    output reg CS, MOSI; 
-    output reg SCK;
+    output reg MISO;
+    //output reg SS, MOSI; 
+    //output reg SCK;
 
     // Asignando estados
     localparam WAITING = 2'b00;
@@ -93,44 +93,43 @@ module receiver_SPI(
         case(state)
             WAITING: begin 
                 nx_count_bit = 0; // Reinicia contador de bits
-                CS = 1; // Desactiva el Chip Select
-                if (strt) nx_state = START; // Si se activa la señal strt
-                // else if (get) // 
+                if (!SS) nx_state = START; // Si se activa la señal SS negada
             end
             
             START: begin 
                 /*Se preparan las condiciones para iniciar la transacción: 
-                    - Se activa CS en bajo
                     - Operaciones para configurar SCK según el modo deseado
                     - Se almacena el data_in en inter_data
-                    - Configurar polaridad de K
+                    - Configurar polaridad de SCK
                 */ 
-                nx_inter_data = data_in; // Hice un cambioa acá 
-                CS = 0; 
+                nx_inter_data = data_in; // Se almacena data_in en inter_data 
                 if (CKP) begin 
-                    SCK = 0; // Modo 1n
+                    //SCK = 0;             // Modo 1n // ESTO NO SE DEBERÍA ASIGNAR PORQUE ES INPUT
                     nx_state = TRANSFER;
                 end 
                 else if (!CKP) begin
-                    SCK = 1;     // Modo 0n
+                    //SCK = 1;             // Modo 0n // ESTO NO SE DEBERIA ASIGNAR PORQUE ES INPUT
                     nx_state = TRANSFER;
                 end
  
             end
 
             TRANSFER: begin
-                SCK = div_freq[DIV_FREQ-1]; // Inicia la oscilación de SCK 
+                //SCK = div_freq[DIV_FREQ-1]; // Inicia la oscilación de SCK // ESTO NO SE PUEDE ASIGNAR PORQUE ES INPUT
                 // Generar captura según modo de SCK
+
+                //if (CPH) capture_edge = posedge_sck; 
+                //else capture_edge = negedge_sck;
 
                 // Modo n0 (Posedge SCK)
                 if (!CPH) begin // Lógica para comunicación con Receptor
                     if (posedge_sck) begin 
-                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
-                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
+                        MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
+                        nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end 
                     /*
-                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
+                        Esto es posible ya que los conforme llegan bits desde MISO los otros bits se desplazan a 
                         la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
                         Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
                     */
@@ -140,9 +139,9 @@ module receiver_SPI(
                 // Modo n1 (Negedge SCK)
                 if (CPH) begin // Lógica para comunicación con Receptor
                     if (negedfe_sck) begin 
-                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
-                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
-                        nx_count_bit = count_bit +1;             // Incrementa contador
+                        MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
+                        nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
+                        nx_count_bit = count_bit +1;             // Incrementa contador             // Incrementa contador
                     end
                     /*
                         Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
