@@ -19,7 +19,7 @@ module transmitter_SPI(
     CKP,     // Define la polaridad de SCK
     MISO,    // Recibe bit por bit la información enviada por el Receptor
     strt,    // Inicia la operación de la interfaz
-    data_in, // Ingreso se dato que debe enviarse por MOSI
+    data_in, // Ingreso de dato que debe enviarse por MOSI
 
     // Outputs
     MOSI,    // Comunicación Transmisor -> Receptor, bit por bit
@@ -56,7 +56,7 @@ module transmitter_SPI(
     // Para SCK y modos de operacion
     // assign SCK = div_freq[DIV_FREQ-1]; // Tomar bit más significativo (1/4 clk)
     assign posedge_sck = !sck_anterior && SCK; // Flanco positivo de SCK
-    assign negedfe_sck = sck_anterior && !SCK; // Flanco negativo de SCK
+    assign negedge_sck = sck_anterior && !SCK; // Flanco negativo de SCK
     
     // Declarando FFs
     always @(posedge clk) begin
@@ -139,7 +139,7 @@ module transmitter_SPI(
                 
                 // Modo n1 (Negedge SCK)
                 if (CPH) begin // Lógica para comunicación con Receptor
-                    if (negedfe_sck) begin 
+                    if (negedge_sck) begin 
                         MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
                         nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
                         nx_count_bit = count_bit +1;             // Incrementa contador
