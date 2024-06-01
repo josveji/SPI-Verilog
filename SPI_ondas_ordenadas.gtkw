@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri May 31 22:56:40 2024
+[*] Sat Jun 01 04:23:12 2024
 [*]
 [dumpfile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\resultados_SPI.vcd"
-[dumpfile_mtime] "Fri May 31 22:55:19 2024"
-[dumpfile_size] 6843
+[dumpfile_mtime] "Sat Jun 01 03:51:45 2024"
+[dumpfile_size] 5607
 [savefile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\SPI_ondas_ordenadas.gtkw"
 [timestart] 0
 [size] 1920 1017
 [pos] -1929 -9
-*-3.009690 53 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.009690 101 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] SPI_tb.
 [sst_width] 197
 [signals_width] 212
@@ -19,12 +19,12 @@
 SPI_tb.U0.rst
 SPI_tb.U0.clk
 SPI_tb.U0.SCK
-@29
 SPI_tb.U0.strt
-@28
 SPI_tb.U0.state[2:0]
 SPI_tb.U0.data_in[7:0]
 SPI_tb.U0.inter_data[7:0]
 SPI_tb.U0.MOSI
+@23
+SPI_tb.U0.count_bit[3:0]
 [pattern_trace] 1
 [pattern_trace] 0

@@ -49,14 +49,28 @@ module tester(
         #1 clk = !clk;
     end
     initial begin 
+        MISO = 1;
+        //MISO = 8'b10101010;
         data_in = 8'b01010101;
         clk = 0;
         rst = 0; 
         CPH = 0;
+        strt = 0; 
         #40 rst = 1;
 
         #4 strt = 1; 
         CKP = 1;
+        #4 strt = 0;
+        
+        // Proabando MISO
+        #10 MISO = 0;
+        #10 MISO = 1;
+        #10 MISO = 0;
+        /*#4 MISO = 1;
+        #4 MISO = 0;
+        #4 MISO = 1;
+        #4 MISO = 0;
+        #4 MISO = 1;*/
          
 
         #200 $finish;

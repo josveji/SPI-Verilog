@@ -71,7 +71,7 @@ module transmitter_SPI(
             count_bit    <= nx_count_bit;
             div_freq     <= div_freq+1;
             sck_anterior <= SCK;
-            inter_data   <= nx_inter_data ; // Acá está mandándolo contantemente?, preguntar
+            inter_data   <= nx_inter_data ; 
 
         end
     end // Fin declaración de FFs
@@ -105,7 +105,7 @@ module transmitter_SPI(
                     - Se almacena el data_in en inter_data
                     - Configurar polaridad de K
                 */ 
-                inter_data = data_in; 
+                nx_inter_data = data_in; // Hice un cambioa acá 
                 CS = 0; 
                 if (CKP) begin 
                     SCK = 0; // Modo 1n
@@ -125,25 +125,35 @@ module transmitter_SPI(
                 // Modo n0 (Posedge SCK)
                 if (!CPH) begin // Lógica para comunicación con Receptor
                     if (posedge_sck) begin 
-                        MOSI = nx_inter_data[count_bit];            // Envía info por MOSI
-                        nx_inter_data = {MISO, inter_data[6:0]}; // Recibe info por MISO
+                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
+                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end 
+                    /*
+                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
+                        la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
+                        Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
+                    */
 
                 end 
                 
                 // Modo n1 (Negedge SCK)
                 if (CPH) begin // Lógica para comunicación con Receptor
                     if (negedfe_sck) begin 
-                        MOSI = nx_inter_data[count_bit];            // Envía info por MOSI
-                        nx_inter_data = {MISO, inter_data[6:0]}; // Recibe info por MISO Recibir
+                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
+                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
                         nx_count_bit = count_bit +1;             // Incrementa contador
                     end
+                    /*
+                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
+                        la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
+                        Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
+                    */
 
                 end
                 
-                // Si se enviaron todos los bits
-                else if (nx_count_bit == 15) nx_state = WAITING; // 15 para que de la vuelta completa
+                // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
+                else if (nx_count_bit == 8) nx_state = WAITING; // 15 para que de la vuelta completa
 
             end
 
