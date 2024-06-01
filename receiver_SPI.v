@@ -107,7 +107,8 @@ module receiver_SPI(
                     //SCK = 0;             // Modo 1n // ESTO NO SE DEBERÍA ASIGNAR PORQUE ES INPUT
                     nx_state = TRANSFER;
                 end 
-                else if (!CKP) begin
+                else if (!CKP) begin // FIND OUT WHAT TO DO WITH CKP
+                
                     //SCK = 1;             // Modo 0n // ESTO NO SE DEBERIA ASIGNAR PORQUE ES INPUT
                     nx_state = TRANSFER;
                 end
