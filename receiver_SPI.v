@@ -6,7 +6,7 @@ Curso: Circuitos Digitales II
 Periodo: I - 2024
 
 Descripción del archivo: Este es el código que implementa el
-módulo Trasmitter_SPI (Master). 
+módulo Receiver_SPI (Slave). 
 */
 
 // Declaración del módulo 
@@ -45,18 +45,15 @@ module receiver_SPI(
 
     // Variables internas
     reg [2:0] state, nx_state;         // Para manejar los estados
-    reg [3:0] count_bit, nx_count_bit; // Para contar los bits que salen *******************Cambiar en caso de 16 
+    reg [4:0] count_bit, nx_count_bit; // Para contar los bits que salen *******************Cambiar en caso de 16 
     reg [DIV_FREQ-1:0] div_freq;       // Para calcular SCK
     reg [7:0] inter_data, nx_inter_data;              // Variable interna, almacena data_in
     wire posedge_sck;                  // Capturar Posedge SCK
-    wire negedfe_sck;                  // Capturar Negedge SCK
+    wire negedge_sck;                  // Capturar Negedge SCK
 
     reg sck_anterior; 
-    //reg sck_adelanto; 
-    // Para SCK y modos de operacion
-    // assign SCK = div_freq[DIV_FREQ-1]; // Tomar bit más significativo (1/4 clk)
     assign posedge_sck = !sck_anterior && SCK; // Flanco positivo de SCK
-    assign negedfe_sck = sck_anterior && !SCK; // Flanco negativo de SCK
+    assign negedge_sck = sck_anterior && !SCK; // Flanco negativo de SCK
     
     // Declarando FFs
     always @(posedge clk) begin
@@ -89,7 +86,6 @@ module receiver_SPI(
             Modo 11    1       1
         */
         
-
         case(state)
             WAITING: begin 
                 nx_count_bit = 0; // Reinicia contador de bits
@@ -103,27 +99,15 @@ module receiver_SPI(
                     - Configurar polaridad de SCK
                 */ 
                 nx_inter_data = data_in; // Se almacena data_in en inter_data 
-                if (CKP) begin 
-                    //SCK = 0;             // Modo 1n // ESTO NO SE DEBERÍA ASIGNAR PORQUE ES INPUT
-                    nx_state = TRANSFER;
-                end 
-                else if (!CKP) begin // FIND OUT WHAT TO DO WITH CKP
                 
-                    //SCK = 1;             // Modo 0n // ESTO NO SE DEBERIA ASIGNAR PORQUE ES INPUT
-                    nx_state = TRANSFER;
-                end
+                nx_state = TRANSFER;
  
             end
 
             TRANSFER: begin
-                //SCK = div_freq[DIV_FREQ-1]; // Inicia la oscilación de SCK // ESTO NO SE PUEDE ASIGNAR PORQUE ES INPUT
-                // Generar captura según modo de SCK
 
-                //if (CPH) capture_edge = posedge_sck; 
-                //else capture_edge = negedge_sck;
-
-                // Modo n0 (Posedge SCK)
-                if (!CPH) begin // Lógica para comunicación con Receptor
+                // Modo 00 (Posedge SCK)
+                if (!CKP && !CPH) begin // Lógica para comunicación con Receptor
                     if (posedge_sck) begin 
                         MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
                         nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
@@ -137,23 +121,36 @@ module receiver_SPI(
 
                 end 
                 
-                // Modo n1 (Negedge SCK)
-                if (CPH) begin // Lógica para comunicación con Receptor
-                    if (negedfe_sck) begin 
+                // Modo 01 (Negedge SCK)
+                if (!CKP && CPH) begin // Lógica para comunicación con Receptor
+                    if (negedge_sck) begin 
                         MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
                         nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
                         nx_count_bit = count_bit +1;             // Incrementa contador             // Incrementa contador
                     end
-                    /*
-                        Esto es posible ya que los conforme llegan bits desde MOSI los otros bits se desplazan a 
-                        la derecha, con lo cual se puede solamente enviar el último bit (menos significativo). 
-                        Lo cual elimina la necesidad de recorrer inter_data con count_bit. 
-                    */
+                end
 
+                // Modo  10
+                if (CKP && !CPH) begin // Lógica para comunicación con Receptor
+                    if (posedge_sck) begin 
+                        MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
+                        nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
+                        nx_count_bit = count_bit +1;             // Incrementa contador
+                    end 
+                end
+
+
+                // Modo 11
+                if (CKP && CPH) begin // Lógica para comunicación con Receptor
+                    if (negedge_sck) begin 
+                        MISO = inter_data[0];                    // Envía por MISO el bit menos significativo 
+                        nx_inter_data = {MOSI, inter_data[7:1]}; // Coloca el bit de MOSI como el más significativo
+                        nx_count_bit = count_bit +1;             // Incrementa contador
+                    end 
                 end
                 
                 // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
-                else if (nx_count_bit == 8) nx_state = WAITING; // 15 para que de la vuelta completa
+                else if (nx_count_bit == 15) nx_state = WAITING; // 15 para que de la vuelta completa
 
             end
 
