@@ -71,7 +71,7 @@ module transmitter_SPI(
             count_bit    <= nx_count_bit;
             div_freq     <= div_freq+1;
             sck_anterior <= SCK;
-            inter_data   <= nx_inter_data ;
+            inter_data   <= nx_inter_data ; // Acá está mandándolo contantemente?, preguntar
 
         end
     end // Fin declaración de FFs
@@ -126,37 +126,29 @@ module transmitter_SPI(
                 if (!CPH) begin // Lógica para comunicación con Receptor
                     if (posedge_sck) begin 
                         MOSI = nx_inter_data[count_bit];            // Envía info por MOSI
-                        nx_inter_data = {nx_inter_data[6:0], MISO}; // Recibe info por MISO
-                        nx_count_bit = nx_count_bit +1;             // Incrementa contador
-                    end
+                        nx_inter_data = {MISO, inter_data[6:0]}; // Recibe info por MISO
+                        nx_count_bit = count_bit +1;             // Incrementa contador
+                    end 
 
                 end 
                 
-                // Modo n1 (Posedge SCK)
+                // Modo n1 (Negedge SCK)
                 if (CPH) begin // Lógica para comunicación con Receptor
                     if (negedfe_sck) begin 
                         MOSI = nx_inter_data[count_bit];            // Envía info por MOSI
-                        nx_inter_data = {nx_inter_data[6:0], MISO}; // Recibe info por MISO
-                        nx_count_bit = nx_count_bit +1;             // Incrementa contador
+                        nx_inter_data = {MISO, inter_data[6:0]}; // Recibe info por MISO Recibir
+                        nx_count_bit = count_bit +1;             // Incrementa contador
                     end
 
                 end
                 
                 // Si se enviaron todos los bits
-                else if (nx_count_bit == 8) nx_state = WAITING; // Será 8(7) más bien?
+                else if (nx_count_bit == 15) nx_state = WAITING; // 15 para que de la vuelta completa
 
             end
 
         endcase
 
     end
-
-
-
-   
-
-
-
-
 
 endmodule // Fin de declaración del módulo

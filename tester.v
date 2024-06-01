@@ -25,17 +25,43 @@ module tester(
     SCK,     // Reloj interno que se transmite al Receptor
     CS  
 );
-    // Inputs
-    input clk, rst, CPH, CKP, strt, MISO; 
-    input [7:0] data_in; 
+    // Inputs ahora se tratan como outputs
+    output clk, rst, CPH, CKP, strt, MISO; 
+    //reg clk;
+    output [7:0] data_in; 
 
-    // Outputs
-    output reg CS, MOSI; 
-    output reg SCK;
+    // Regs para outputs
+    reg clk, rst, CPH, CKP, strt, MISO;
+    reg [7:0] data_in;
+
+
+    // Outputs ahroa se tratan como inputs
+    input CS, MOSI, SCK;
+    wire CS, MOSI, SCK;
+    
+    //input CS, MOSI;
+    //reg CS, MOSI;  
+    //input SCK;
+    //reg SCK;
 
     // Declaración de reloj
     always begin 
         #1 clk = !clk;
+    end
+    initial begin 
+        data_in = 8'b01010101;
+        clk = 0;
+        rst = 0; 
+        CPH = 0;
+        #40 rst = 1;
+
+        #4 strt = 1; 
+        CKP = 1;
+         
+
+        #200 $finish;
+
+
     end
 
 endmodule
