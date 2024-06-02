@@ -98,7 +98,12 @@ module SPI_tb;
     end
 
     initial begin 
-        //------------Prueba 1, modo 10-----------
+        /*------------Prueba 1, modo 10-----------
+        En esta prueba se envía los siguientes datos
+
+        
+        */
+
         data_in_m  = 8'b01010101;
         data_in_s1 = 8'b00000000;
         data_in_s2 = 8'b00001111;
