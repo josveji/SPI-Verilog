@@ -1,0 +1,62 @@
+# Este archivo contiene los comandos necesarios para hacer la 
+# sintesis de la maquina de estados ATM ATM_controller
+
+# read design 
+read_verilog transmitter_SPI.v
+
+# elaborate design hierarchy
+hierarchy -check -top transmitter_SPI
+
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
+
+# mapping to internal cell library
+techmap; opt
+
+# write rtlil design
+write_verilog transmitter_rtlil.v
+
+# mapping flip-flops to cmos_cells.lib
+dfflibmap -liberty ./cmos_cells.lib
+
+# mapping logic to cmos_cells.lib
+abc -liberty ./cmos_cells.lib
+
+#Generate GraphViz output
+show
+
+# cleanup
+clean
+
+# write synthesized design
+write_verilog transmitter_synth.v
+
+# read design 
+read_verilog receiver_SPI.v
+
+# elaborate design hierarchy
+hierarchy -check -top receiver_SPI
+
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
+
+# mapping to internal cell library
+techmap; opt
+
+# write rtlil design
+write_verilog receiver_rtlil.v
+
+# mapping flip-flops to cmos_cells.lib
+dfflibmap -liberty ./cmos_cells.lib
+
+# mapping logic to cmos_cells.lib
+abc -liberty ./cmos_cells.lib
+
+#Generate GraphViz output
+show
+
+# cleanup
+clean
+
+# write synthesized design
+write_verilog receiver_synth.v

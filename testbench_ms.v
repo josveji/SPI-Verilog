@@ -9,8 +9,13 @@ Descripción del archivo: Este es el código encargado de evaluar las pruebas de
 */
 
 //`include "tester_ms.v" // Incluyendo archivo de pruebas
-`include "transmitter_SPI.v" // Incluyendo Transmisor
-`include "receiver_SPI.v" // Incluyendo Receptor
+//`include "transmitter_SPI.v" // Incluyendo Transmisor
+//`include "receiver_SPI.v" // Incluyendo Receptor
+//`include "transmitter_rtlil.v" // Incluyendo máquina de estados
+`include "transmitter_synth.v" // Version RTLIL
+//`include "receiver_rtlil.v" // Incluyendo máquina de estados
+`include "receiver_synth.v" // Version RTLIL
+`include "cmos_cells.v"
 
 // Declaración del módulo 
 
