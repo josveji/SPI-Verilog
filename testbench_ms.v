@@ -17,9 +17,9 @@ Descripción del archivo: Este es el código encargado de evaluar las pruebas de
 module SPI_tb;
     //Entradas
     reg clk, rst_m, rst_s1, rst_s2, CPH, CKP, strt; 
-    reg [7:0] data_in_m;   // Data_in de Master
-    reg [7:0] data_in_s1;  // Data_in de Slave 1 (s1)
-    reg [7:0] data_in_s2;  // Data_in de Slave 2 (s2)
+    reg [15:0] data_in_m;   // Data_in de Master
+    reg [15:0] data_in_s1;  // Data_in de Slave 1 (s1)
+    reg [15:0] data_in_s2;  // Data_in de Slave 2 (s2)
 
     // Salidas 
     wire CS, MISO, MOSI, SCK; 
@@ -104,9 +104,9 @@ module SPI_tb;
         
         */
 
-        data_in_m  = 8'b01010101;
-        data_in_s1 = 8'b00000000;
-        data_in_s2 = 8'b00001111;
+        data_in_m  = 16'b0101010101010101;
+        data_in_s1 = 16'b0000000000000000;
+        data_in_s2 = 16'b0000111100001111;
         
         clk = 0;
         rst_m = 0;

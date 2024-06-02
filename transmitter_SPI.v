@@ -29,7 +29,7 @@ module transmitter_SPI(
 
     // Declaración de entradas (inputs)
     input clk, rst, CPH, CKP, strt, MISO; 
-    input [7:0] data_in; 
+    input [15:0] data_in; 
 
     // Declaración de salidas (outputs)
     output reg CS, MOSI; 
@@ -45,9 +45,9 @@ module transmitter_SPI(
 
     // Variables internas
     reg [2:0] state, nx_state;         // Para manejar los estados
-    reg [5:0] count_bit, nx_count_bit; // Para contar los bits que salen *******************Cambiar en caso de 16 
+    reg [6:0] count_bit, nx_count_bit; // Para contar los bits que salen 
     reg [DIV_FREQ-1:0] div_freq;       // Para calcular SCK
-    reg [7:0] inter_data, nx_inter_data;              // Variable interna, almacena data_in
+    reg [15:0] inter_data, nx_inter_data;              // Variable interna, almacena data_in
     wire posedge_sck;                  // Capturar Posedge SCK
     wire negedfe_sck;                  // Capturar Negedge SCK
 
@@ -123,9 +123,9 @@ module transmitter_SPI(
                 // Modo n0 (Posedge SCK)
                 if (!CPH) begin // Lógica para comunicación con Receptor
                     if (posedge_sck) begin 
-                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
-                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
-                        nx_count_bit = count_bit +1;             // Incrementa contador
+                        MOSI = inter_data[0];                     // Envía por MOSI el bit menos significativo 
+                        nx_inter_data = {MISO, inter_data[15:1]}; // Coloca el bit de MISO como el más significativo
+                        nx_count_bit = count_bit +1;              // Incrementa contador
                     end 
                     /*
                         Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
@@ -138,9 +138,9 @@ module transmitter_SPI(
                 // Modo n1 (Negedge SCK)
                 if (CPH) begin // Lógica para comunicación con Receptor
                     if (negedge_sck) begin 
-                        MOSI = inter_data[0];                    // Envía por MOSI el bit menos significativo 
-                        nx_inter_data = {MISO, inter_data[7:1]}; // Coloca el bit de MISO como el más significativo
-                        nx_count_bit = count_bit +1;             // Incrementa contador
+                        MOSI = inter_data[0];                     // Envía por MOSI el bit menos significativo 
+                        nx_inter_data = {MISO, inter_data[15:1]}; // Coloca el bit de MISO como el más significativo
+                        nx_count_bit = count_bit +1;              // Incrementa contador
                     end
                     /*
                         Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
@@ -151,7 +151,7 @@ module transmitter_SPI(
                 end
                 
                 // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
-                else if (nx_count_bit == 24) nx_state = WAITING; // 32 para que de la vuelta completa (tomando en cuenta 2 receptores)
+                else if (nx_count_bit == 48) nx_state = WAITING; // 32 para que de la vuelta completa (tomando en cuenta 2 receptores)
 
             end
 
