@@ -43,7 +43,7 @@ module receiver_SPI(
 
     // Variables internas
     reg [2:0] state, nx_state;         // Para manejar los estados
-    reg [4:0] count_bit, nx_count_bit; // Para contar los bits que salen *******************Cambiar en caso de 16 
+    reg [5:0] count_bit, nx_count_bit; // Para contar los bits que salen *******************Cambiar en caso de 16 
     reg [DIV_FREQ-1:0] div_freq;       // Para calcular SCK
     reg [7:0] inter_data, nx_inter_data;              // Variable interna, almacena data_in
     wire posedge_sck;                  // Capturar Posedge SCK
@@ -146,7 +146,7 @@ module receiver_SPI(
                 end
                 
                 // Si se enviaron todos los bits y estos llegaron de vuelta a las posiciones originales se termina
-                else if (nx_count_bit == 16) nx_state = WAITING; // 16 para que de la vuelta completa
+                else if (nx_count_bit == 24) nx_state = WAITING; // 32 para que de la vuelta completa (tomando en cuenta 2 receptores)
 
             end
 

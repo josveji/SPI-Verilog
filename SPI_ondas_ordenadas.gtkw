@@ -1,35 +1,53 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Jun 01 23:08:55 2024
+[*] Sun Jun 02 00:31:06 2024
 [*]
 [dumpfile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\resultados_SPI.vcd"
-[dumpfile_mtime] "Sat Jun 01 23:08:12 2024"
-[dumpfile_size] 8974
+[dumpfile_mtime] "Sun Jun 02 00:29:05 2024"
+[dumpfile_size] 50635
 [savefile] "C:\Users\josue\OneDrive\Documentos\Universidad\2024\Circuitos Digitales II\Tarea 4\SPI-Verilog\SPI_ondas_ordenadas.gtkw"
-[timestart] 37
+[timestart] 228
 [size] 1920 1017
 [pos] -1929 -9
-*-4.009690 176 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-3.009690 19 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] SPI_tb.
 [sst_width] 197
 [signals_width] 221
 [sst_expanded] 1
 [sst_vpaned_height] 300
 @28
-SPI_tb.U0.rst
-SPI_tb.U0.clk
-SPI_tb.U0.SCK
-SPI_tb.U0.strt
-SPI_tb.U0.state[2:0]
-SPI_tb.U0.data_in[7:0]
-SPI_tb.U1.data_in[7:0]
-@24
-SPI_tb.U0.count_bit[4:0]
-@28
-SPI_tb.U0.CKP
-SPI_tb.U0.CPH
-SPI_tb.U0.inter_data[7:0]
-[color] 7
-SPI_tb.U1.inter_data[7:0]
+[color] 6
+SPI_tb.Master.rst
+[color] 2
+SPI_tb.Slave1.rst
+SPI_tb.Master.strt
+SPI_tb.Master.clk
+SPI_tb.Master.SCK
+SPI_tb.Master.CKP
+SPI_tb.Master.CPH
+[color] 6
+SPI_tb.Master.data_in[7:0]
+[color] 2
+SPI_tb.Slave1.data_in[7:0]
+[color] 3
+SPI_tb.Slave2.data_in[7:0]
+[color] 6
+SPI_tb.Master.MOSI
+[color] 2
+SPI_tb.Slave1.MISO
+[color] 3
+SPI_tb.Slave2.MISO
+[color] 6
+SPI_tb.Master.CS
+SPI_tb.Master.CPH
+SPI_tb.Master.CKP
+[color] 6
+SPI_tb.Master.inter_data[7:0]
+[color] 2
+SPI_tb.Slave1.inter_data[7:0]
+[color] 3
+SPI_tb.Slave2.inter_data[7:0]
+@25
+SPI_tb.Master.count_bit[5:0]
 [pattern_trace] 1
 [pattern_trace] 0
