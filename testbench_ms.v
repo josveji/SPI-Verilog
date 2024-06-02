@@ -100,29 +100,130 @@ module SPI_tb;
     initial begin 
         /*------------Prueba 1, modo 10-----------
         En esta prueba se envía los siguientes datos
-
-        
+        Carnet: C13987
+        **************Para Transmisor*************
+        Tercer dígito: 3 en binario -> 00000011
+        Cuarto dígito: 9 en binario -> 00001001
+        Por lo tanto, el Transmisor debe enviar:  16'b0000001100001001
+        ***************Para Receptor**************
+        Quinto dígito: 8 en binario -> 00001000
+        Sexto  dígito: 7 en binario -> 00000111
+        Por lo tanto, los receptor 1 debe enviar: 16'b0000100000000111
         */
 
-        data_in_m  = 16'b0101010101010101;
-        data_in_s1 = 16'b0000000000000000;
-        data_in_s2 = 16'b0000111100001111;
+        data_in_m  = 16'b0000001100001001; // Se asigna según lo de arriba 
+        data_in_s1 = 16'b0000100000000111; // Se asigna según lo de arriba
+        data_in_s2 = 16'b0000000000000000; // Se asigna a convenir
         
         clk = 0;
         rst_m = 0;
         rst_s1 = 0;
         rst_s2 = 0; 
 
-        CPH = 0;
+        // Modo de operación 10
         CKP = 1;
+        CPH = 0;
+
         strt = 0;
-    
         #40 rst_m = 1;
         rst_s1 = 1; 
         rst_s2 = 1; 
         
         #4 strt = 1; 
         #4 strt = 0;
+
+        /*--------------Fin Prueba 1-------------*/
+
+        /*------------Prueba 2, modo 00-----------
+        En esta prueba se envía los mismos datos que
+        en la preuba anterior. Pero esta vez en el 
+        Modo 00 
+        */
+
+        data_in_m  = 16'b0000001100001001; // Se asigna según lo de arriba 
+        data_in_s1 = 16'b0000100000000111; // Se asigna según lo de arriba
+        data_in_s2 = 16'b0000000000000000; // Se asigna a convenir
+
+        // Modo de operación 10
+
+        #400;
+        CKP = 0;
+        CPH = 0;
+        rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+
+        strt = 0;
+        #40 rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+        
+        #4 strt = 1; 
+        #4 strt = 0;
+
+        /*--------------Fin Prueba 2-------------*/
+
+        /*------------Prueba 3, modo 11-----------
+        En esta prueba se envía los mismos datos que
+        en la preuba anterior. Pero esta vez en el 
+        Modo 00 
+        */
+
+        data_in_m  = 16'b0000001100001001; // Se asigna según lo de arriba 
+        data_in_s1 = 16'b0000100000000111; // Se asigna según lo de arriba
+        data_in_s2 = 16'b0000000000000000; // Se asigna a convenir
+
+        // Modo de operación 11
+
+        #400;
+        CKP = 1;
+        CPH = 1;
+        rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+
+        strt = 0;
+        #40 rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+        
+        #4 strt = 1; 
+        #4 strt = 0;
+
+        /*--------------Fin Prueba 3-------------*/
+
+        /*------------Prueba 4, modo 01-----------
+        En esta prueba se envía los mismos datos que
+        en la preuba anterior. Pero esta vez en el 
+        Modo 00 
+        */
+
+        data_in_m  = 16'b0000001100001001; // Se asigna según lo de arriba 
+        data_in_s1 = 16'b0000100000000111; // Se asigna según lo de arriba
+        data_in_s2 = 16'b0000000000000000; // Se asigna a convenir
+
+        // Modo de operación 01
+
+        #400;
+        CKP = 0;
+        CPH = 1;
+        rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+
+        strt = 0;
+        #40 rst_m = 1;
+        rst_s1 = 1; 
+        rst_s2 = 1; 
+        
+        #4 strt = 1; 
+        #4 strt = 0;
+
+        /*--------------Fin Prueba 4-------------*/
+
+
+
+
 
         #2000 $finish;
 

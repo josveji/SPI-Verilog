@@ -141,6 +141,7 @@ module transmitter_SPI(
                         MOSI = inter_data[0];                     // Envía por MOSI el bit menos significativo 
                         nx_inter_data = {MISO, inter_data[15:1]}; // Coloca el bit de MISO como el más significativo
                         nx_count_bit = count_bit +1;              // Incrementa contador
+                        if (nx_inter_data == data_in && count_bit != 1) nx_state = WAITING;
                     end
                     /*
                         Esto es posible ya que conforme llegan bits desde MOSI los otros bits se desplazan a 
